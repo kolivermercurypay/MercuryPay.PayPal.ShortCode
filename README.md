@@ -1,51 +1,54 @@
 MercuryPay.PayPal.ShortCode
 ===========================
 
-Integration to MercuryPay PayPal ShortCode Solution
+VS 2010 integration to MercuryPay PayPal ShortCode Solution
 
-VS 2010 console application processing transactions to our web services platform.
+3 step process to integrate.
 
-3 step process to integrate to Mercury Web Services.
+##Step 1: Build Request
 
-##Step 1: Build Request with Key Value Pairs
-  
 Create a Dictionary&lt;string, object&gt; variable and add all the Key Value Pairs.
   
 ```
-Dictionary<string, object> requestDictionary = new Dictionary<string, object>();
+this.txtInvoiceNo.Text = DateTime.Now.ToString("yyMMddHHmmss");
+            
+Dictionary<string, object> request = new Dictionary<string, object>();
+request.Add("MerchantID", "595901");
+request.Add("TranType", "Credit");
+request.Add("TranCode", "PreAuth");
+request.Add("InvoiceNo", this.txtInvoiceNo.Text);
+request.Add("RefNo", this.txtInvoiceNo.Text);
+request.Add("Memo", "PayPalTesting PayPalPilot");
+request.Add("OperatorID", "test");
 
-requestDictionary.Add("MerchantID", merchantID);
-requestDictionary.Add("TranType", "Credit");
-requestDictionary.Add("TranCode", "Sale");
-requestDictionary.Add("InvoiceNo", invoiceNo);
-requestDictionary.Add("RefNo", invoiceNo);
-requestDictionary.Add("Memo", memo);
-requestDictionary.Add("Frequency", "OneTime");
-requestDictionary.Add("RecordNo", "RecordNumberRequested");
-requestDictionary.Add("PartialAuth", "Allow");
-requestDictionary.Add("EncryptedFormat", "MagneSafe");
-requestDictionary.Add("AccountSource", "Swiped");
-requestDictionary.Add("EncryptedBlock", swipedCreditEncryptedBlock);
-requestDictionary.Add("EncryptedKey", swipedCreditEncryptedKey);
-requestDictionary.Add("Purchase", purchase);
-requestDictionary.Add("OperatorID", operatorID);
+Dictionary<string, object> accountData = new Dictionary<string, object>();
+accountData.Add("EncryptedFormat", "MercuryPayPalPilot");
+accountData.Add("AccountSource", "Keyed");
+accountData.Add("EncryptedBlock", this.txtShortCode.Text);
+accountData.Add("EncryptedKey", "");
+request.Add("Account", accountData);
+
+Dictionary<string, object> amountData = new Dictionary<string, object>();
+amountData.Add("Purchase", "2.25");
+amountData.Add("Authorize", "2.25");
+request.Add("Amount", amountData);
+
 ```
   
 ##Step 2: Process the Transaction
 
-a. Create a service reference to our testing URL @ https://w1.mercurydev.net/ws/ws.asmx.
+a. Create a service reference to our testing URL @ https://w1.mercurycert.net/ws/mobile.asmx.
 
 b. Use XMLHelper.BuildXMLRequest(Dictionary<string, object) to create the XML Request string.
 
-c. Call the CreditTransaction web method with XML Request string and Merchant's Password.
+c. Call the CreditTransactionPilot web method with XML Request string and Merchant's Password.
 
 ```
-string xmlRequest = XMLHelper.BuildXMLRequest(requestDictionary).ToString();
-string xmlResponse = string.Empty;
+string xmlRequest = XMLHelper.BuildXMLRequest(request, "Transaction").ToString();
 
-using (MercuryWebServices.wsSoapClient client = new MercuryWebServices.wsSoapClient())
+using (PayPalAlpha.mobileSoapClient client = new PayPalAlpha.mobileSoapClient())
 {
-   xmlResponse = client.CreditTransaction(xmlRequest, password);
+  string xmlResponse = client.CreditTransactionPilot(this.rtbRequest.Text, "xyz");
 }
 ```
 
