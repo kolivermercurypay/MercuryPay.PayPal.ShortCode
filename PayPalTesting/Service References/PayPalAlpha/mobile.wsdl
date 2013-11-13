@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.mercurypay.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.mercurypay.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.mercurypay.com">
+      <s:element name="MobileTransactionPilot">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tran" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pw" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MobileTransactionPilotResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MobileTransactionPilotResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditTransactionPilot">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tran" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pw" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditTransactionPilotResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreditTransactionPilotResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="MobileTransactionPilotSoapIn">
+    <wsdl:part name="parameters" element="tns:MobileTransactionPilot" />
+  </wsdl:message>
+  <wsdl:message name="MobileTransactionPilotSoapOut">
+    <wsdl:part name="parameters" element="tns:MobileTransactionPilotResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditTransactionPilotSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditTransactionPilot" />
+  </wsdl:message>
+  <wsdl:message name="CreditTransactionPilotSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditTransactionPilotResponse" />
+  </wsdl:message>
+  <wsdl:portType name="mobileSoap">
+    <wsdl:operation name="MobileTransactionPilot">
+      <wsdl:input message="tns:MobileTransactionPilotSoapIn" />
+      <wsdl:output message="tns:MobileTransactionPilotSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditTransactionPilot">
+      <wsdl:input message="tns:CreditTransactionPilotSoapIn" />
+      <wsdl:output message="tns:CreditTransactionPilotSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="mobileSoap" type="tns:mobileSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="MobileTransactionPilot">
+      <soap:operation soapAction="http://www.mercurypay.com/MobileTransactionPilot" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditTransactionPilot">
+      <soap:operation soapAction="http://www.mercurypay.com/CreditTransactionPilot" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="mobile">
+    <wsdl:port name="mobileSoap" binding="tns:mobileSoap">
+      <soap:address location="https://w1.mercurycert.net/ws/mobile.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
